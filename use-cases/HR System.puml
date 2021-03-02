@@ -1,6 +1,7 @@
 @startuml
 
 actor HR as "HR Advisor"
+actor DM as "Dept Manager"
 
 rectangle Database
 
@@ -10,9 +11,33 @@ rectangle "HR System" {
 
     usecase UCa as "Print salaries"
 
-    HR - UC4
+    HR -- UC4
     UC4 ..> UCa : include
-    UC4 - Database
+    UC4 --- Database
+
+    usecase UC5 as "Get salaries by role & dept"
+    HR - UC5
+        UC5 ..> UCa : include
+        UC5 - Database
+
+
+    usecase UC6 as "Get salaries by dept"
+    DM -- UC6
+
+        UC6 - Database
+
+    usecase UC7 as "Add new details"
+    HR - UC7
+        UC7 -> Database
+
+    usecase UC8 as "Update details"
+    HR - UC8
+        UC8 -> Database
+
+    usecase UC9 as "Delete details"
+        HR - UC9
+            UC9 -> Database
+
 }
 
 @enduml
