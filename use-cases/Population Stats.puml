@@ -43,7 +43,72 @@ Usecase UC7 as "Cities of world (largest to smallest pop)"
 User -- UC7
 UC7 -- Database
 UC7 ..> UCa
+
+Usecase UC8 as "Cities of continent (largest to smallest pop)"
+User --UC8
+UC8 --Database
+UC8 ..> UCa
+
+Usecase UC9 as "Cities of region (largest to smallest pop)"
+User --UC9
+UC9 --Database
+UC9 ..> UCa
+
+Usecase UC10 as "Cities of Country (largest to smallest pop)"
+User --UC10
+UC10 --Database
+UC10 ..> UCa
+
+Usecase UC11 as "Cities of District (largest to smallest pop)"
+User --UC11
+UC11 --Database
+UC11 ..> UCa
+
+Usecase UC12 as "Top N populated cities in world by User input"
+User -- UC12
+UC12 -- Database
+UC12 ..> UCa
+UC12 -UInput
+
+Usecase UC13 as "Top N populated cities in continent by User input"
+User -- UC13
+UC13 -- Database
+UC13 ..> UCa
+UC13 -UInput
+
+Usecase UC14 as "Top N populated cities in region by User input"
+User -- UC14
+UC14 -- Database
+UC14 ..> UCa
+UC14 -UInput
+
+Usecase UC15 as "Top N populated cities in country by User input"
+User -- UC15
+UC15 -- Database
+UC15 ..> UCa
+UC15 -UInput
+
+Usecase UC16 as "Top N populated cities in district by User input"
+User -- UC16
+UC16 -- Database
+UC16 ..> UCa
+UC16 - UInput
+
+Usecase UC17 as "Capital cities in world (largest to smallest)"
+User -- UC17
+UC17--Database
+UC17 ..> UCa
+
+Usecase UC18 as "Capital cities in continent (largest to smallest)"
+User -- UC18
+UC18--Database
+UC18 ..> UCa
+
+Usecase UC19 as "Capital cities in region (largest to smallest)"
+User -- UC19
+UC19--Database
+UC19 ..> UCa
+
+
 }
-
-
 @enduml
