@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+User as User
+rectangle Database
+rectangle "User Interface"{
+usecase UCa as "Print Population"
+usecase UInput as "User Input"
+
+Usecase UC1 as "Sort by Population in country (Large to Small)"
+User --> UC1
+UC1 -- Database
+UC1 ..> UCa
+
+Usecase UC2 as "Sort by Population in country (Small to Large)"
+User --> UC2
+UC2 -- Database
+UC2 ..> UCa
+
+Usecase UC3 as "Sort by Populate in region (Large to Small)"
+User --> UC3
+UC3--Database
+UC3 ..> UCa
+
+Usecase UC4 as "Get top N in countries of world by User input"
+User --> UC4
+UC4 - UInput
+UInput <- User
+UC4 --Database
+
+Usecase UC5 as "Get top N in countries of continent by User input"
+User --> UC5
+UC5 - UInput
+UInput <- User
+UC5 --Database
+
+Usecase UC6 as "Get top N in countries of region by User input"
+User --> UC6
+UC6 - UInput
+UInput <- User
+UC6 --Database
+
+Usecase UC7 as "Cities of world (largest to smallest pop)"
+User -- UC7
+UC7 -- Database
+UC7 ..> UCa
+}
+
+
+@enduml
