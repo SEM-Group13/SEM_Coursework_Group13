@@ -109,6 +109,37 @@ User -- UC19
 UC19--Database
 UC19 ..> UCa
 
+Usecase UC20 as "Top N Capital cities in world by user input"
+User --UC20
+UC20 -- Database
+UC20 ..> UCa
+UC20 - UInput
 
+Usecase UC21 as "Top N Capital cities in continent by user input"
+User --UC21
+UC21 -- Database
+UC21 ..> UCa
+UC21 - UInput
+
+Usecase UC22 as "Top N Capital cities in region by user input"
+User --UC22
+UC22 -- Database
+UC22 ..> UCa
+UC22 - UInput
+
+Usecase UC23 as "Population of urban and rural people in cities of continent"
+User -- UC23
+UC23 -- Database
+UC23 ..> UCa
+
+Usecase UC24 as "Population of urban and rural people in cities of region"
+User -- UC24
+UC24 -- Database
+UC24 ..> UCa
+
+Usecase UC25 as "Population of urban and rural people in cities of country"
+User -- UC25
+UC25 -- Database
+UC25 ..> UCa
 }
 @enduml
