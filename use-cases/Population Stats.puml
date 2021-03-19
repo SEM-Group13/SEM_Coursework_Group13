@@ -2,9 +2,18 @@
 'https://plantuml.com/use-case-diagram
 User as User
 rectangle Database
+usecase spec1 as "Specify Continent"
+usecase spec2 as "Specify Region"
+usecase spec3 as "Specify Country"
+usecase spec4 as "Specify District"
+usecase spec5 as "Specify City"
+usecase UInput as "Specify N"
+
+
+
 rectangle "User Interface"{
 usecase UCa as "Print Population"
-usecase UInput as "User Input"
+
 
 Usecase UC1 as "Sort by Population in country (Large to Small)"
 User --> UC1
@@ -141,5 +150,40 @@ Usecase UC25 as "Population of urban and rural people in cities of country"
 User -- UC25
 UC25 -- Database
 UC25 ..> UCa
+
+Usecase UC26 as "Population of World"
+User -- UC26
+UC26 -- Database
+UC26 ..> UCa
+
+Usecase UC27 as "Population of Continent"
+User -- UC27
+UC27 -- spec1
+UC27 -- Database
+UC27 ..> UCa
+
+Usecase UC28 as "Population of Region"
+User -- UC28
+UC28 -- spec2
+UC28 -- Database
+UC28 ..> UCa
+
+Usecase UC29 as "Population of Country"
+User -- UC29
+UC29 -- spec3
+UC29 -- Database
+UC29 ..> UCa
+
+Usecase UC30 as "Population of District"
+User -- UC30
+UC30 -- spec4
+UC30 -- Database
+UC30 ..> UCa
+
+Usecase UC31 as "Population of City"
+User -- UC31
+UC31 -- spec5
+UC31 -- Database
+UC31 ..> UCa
 }
 @enduml
