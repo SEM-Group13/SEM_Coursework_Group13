@@ -7,7 +7,15 @@ usecase spec2 as "Specify Region"
 usecase spec3 as "Specify Country"
 usecase spec4 as "Specify District"
 usecase spec5 as "Specify City"
+usecase spec6 as "Specify Language"
 usecase UInput as "Specify N"
+User <= UInput
+User <= spec1
+User <= spec2
+User <= spec3
+User <= spec4
+User <= spec5
+User <= spec6
 
 
 
@@ -16,13 +24,13 @@ usecase UCa as "Print Population"
 
 
 Usecase UC1 as "Sort by Population in country (Large to Small)"
-User --> UC1
+User -> UC1
 UC1 -- Database
 UC1 ..> UCa
 
 Usecase UC2 as "Sort by Population in country (Small to Large)"
 User --> UC2
-UC2 -- Database
+UC2 - Database
 UC2 ..> UCa
 
 Usecase UC3 as "Sort by Populate in region (Large to Small)"
@@ -185,5 +193,11 @@ User -- UC31
 UC31 -- spec5
 UC31 -- Database
 UC31 ..> UCa
+
+Usecase UC32 as "Population of language"
+User -- UC32
+UC32 -- Spec6
+UC32 -- Database
+UC32 ..>UCa
 }
 @enduml
