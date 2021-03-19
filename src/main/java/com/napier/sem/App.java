@@ -13,21 +13,9 @@ public class App
 
         // Connect to database
         a.connect();
-/*
-        // Extract employee salary information
-        ArrayList<Employee> employees = a.getAllSalaries();
 
-        // Test the size of the returned data - should be 240124
-        System.out.println(employees.size());
 
-        // Print Data
-        printSalaries(employees);
-*/
-        //Scanner sc = new Scanner(System.in);
-        String role= "Engineer";
-        ArrayList<Employee> employees=a.getAllSalariesByRole(role);
-        printSalaries(employees);
-        // Disconnect from database
+
         a.disconnect();
     }
     /**
@@ -60,7 +48,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
