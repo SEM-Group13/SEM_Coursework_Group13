@@ -157,7 +157,7 @@ public class App {
         //Insert header here
         System.out.println(String.format("|%-15s | %-10s | %-20s | %-30s|", "City Name", "Country Code", "District", "Population" ));
         for(City city: cities){
-            String city_string=String.format("|%-15s | %-30s | %-15s | %-30s|", city.name, city.country, city.district, city.population);
+            String city_string=String.format("|%-20s | %-10s | %-20s | %-10d|", city.name, city.country, city.district, city.population);
             System.out.println(city_string);
         }
     }
