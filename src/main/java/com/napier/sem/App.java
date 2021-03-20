@@ -12,8 +12,11 @@ public class App {
 
         // Connect to database
         a.connect();
-        ArrayList<Country> C= a.getCountries_World_By_LS();
-        printCountries(C);
+        ArrayList<Country> Coun= a.getCountries_World_By_LS();
+        printCountries(Coun);
+
+        ArrayList<City> City=a.getCities_World_By_LS();
+        printCities(City);
 
         a.disconnect();
     }
@@ -68,11 +71,10 @@ public class App {
         }
     }
 
-
-    public void Countries_World_LS(){
-
-    }
-
+    /**
+     * get Countries of the world sorted by large to small
+     * @return countries
+     */
     public ArrayList<Country> getCountries_World_By_LS(){
         try {
             //Create SQL statment
@@ -105,155 +107,59 @@ public class App {
         }
     }
 
-    public static void printCountries(ArrayList<Country> countries){
-        //Insert header here
-        System.out.println(String.format("|%-15s | %-30s | %-15s | %-30s | %-15s | %-15s|", "Country Code","Country Name", "Continent", "Region" , "Population", "Capital"));
-        for(Country country: countries){
-            String c_string=String.format("|%-15s | %-30s | %-15s | %-30s | %-15d | %-15d|", country.code, country.name, country.continent, country.region, country.population, country.capital);
-            System.out.println(c_string);
-        }
-    }
-
-
-
-
-
-
-
-
-
-    public Employee getEmployee(int ID) {
+    public ArrayList<City> getCities_World_By_LS(){
         try {
-            // Create an SQL statement
+            //Create SQL statment
             Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT employees.emp_no, first_name, last_name, title, salary, dept_name, dept_manager.emp_no "
-                            + "FROM employees "
-                            + "JOIN titles on (titles.emp_no=employees.emp_no) "
-                            + "JOIN salaries on (employees.emp_no=salaries.emp_no) "
-                            + "JOIN dept_emp on (dept_emp.emp_no=employees.emp_no) "
-                            + "JOIN departments on (dept_emp.dept_no=departments.dept_no) "
-                            + "JOIN dept_manager on (departments.dept_no=dept_manager.dept_no)"
-                            + "WHERE employees.emp_no = " + ID
-                            + " AND titles.to_date = '9999-01-01'";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new employee if valid.
-            // Check one is returned
-            if (rset.next()) {
-                Employee emp = new Employee();
-                emp.emp_no = rset.getInt("employees.emp_no");
-                emp.first_name = rset.getString("first_name");
-                emp.last_name = rset.getString("last_name");
-                emp.title = rset.getString("title");
-                emp.salary = rset.getInt("salary");
-                emp.manager = rset.getString("dept_manager.emp_no");
-                emp.dept_name = rset.getString("dept_name");
-                return emp;
-            } else
-                return null;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get employee details");
-            return null;
-        }
-    }
 
-    public void displayEmployee(Employee emp) {
-        if (emp != null) {
-            System.out.println(
-                    emp.emp_no + " "
-                            + emp.first_name + " "
-                            + emp.last_name + "\n"
-                            + emp.title + "\n"
-                            + "Salary:" + emp.salary + "\n"
-                            + emp.dept_name + "\n"
-                            + "Manager: " + emp.manager + "\n");
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT name, countrycode, district, population "
+                            + "FROM city "
+                            + "ORDER BY population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
         }
     }
 
     /**
-     * Gets all the current employees and salaries.
-     *
-     * @return A list of all employees and salaries, or null if there is an error.
+     * Outputs report of countries table
+     * @param countries
      */
-    public ArrayList<Employee> getAllSalaries() {
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
-                            + "FROM employees, salaries "
-                            + "WHERE employees.emp_no = salaries.emp_no AND salaries.to_date = '9999-01-01' "
-                            + "ORDER BY employees.emp_no ASC";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract employee information
-            ArrayList<Employee> employees = new ArrayList<Employee>();
-            while (rset.next()) {
-                Employee emp = new Employee();
-                emp.emp_no = rset.getInt("employees.emp_no");
-                emp.first_name = rset.getString("employees.first_name");
-                emp.last_name = rset.getString("employees.last_name");
-                emp.salary = rset.getInt("salaries.salary");
-                employees.add(emp);
-            }
-            return employees;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get salary details");
-            return null;
+    public static void printCountries(ArrayList<Country> countries){
+        //Insert header here
+        System.out.println(String.format("|%-15s | %-30s | %-15s | %-40s | %-15s | %-15s|", "Country Code","Country Name", "Continent", "Region" , "Population", "Capital"));
+        for(Country country: countries){
+            String coun_string=String.format("|%-15s | %-30s | %-15s | %-40s | %-15d | %-15d|", country.code, country.name, country.continent, country.region, country.population, country.capital);
+            System.out.println(coun_string);
         }
     }
 
-    public ArrayList<Employee> getAllSalariesByRole(String role) {
-        role = "'" + role + "'";
-        System.out.print("WORK");
-        try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
-                            + "FROM employees, salaries, titles "
-                            + "WHERE employees.emp_no = salaries.emp_no "
-                            + "AND employees.emp_no = titles.emp_no "
-                            + "AND salaries.to_date = '9999-01-01' "
-                            + "AND titles.to_date = '9999-01-01' "
-                            + "AND titles.title = " + role
-                            + " ORDER BY employees.emp_no ASC";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract employee information
-            ArrayList<Employee> employees = new ArrayList<Employee>();
-            while (rset.next()) {
-                Employee emp = new Employee();
-
-                emp.emp_no = rset.getInt("employees.emp_no");
-                emp.first_name = rset.getString("employees.first_name");
-                emp.last_name = rset.getString("employees.last_name");
-                emp.salary = rset.getInt("salaries.salary");
-                employees.add(emp);
-            }
-            return employees;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get salary details");
-            return null;
+    /**
+     * Outputs report of cities table
+     * @param cities
+     */
+    public static void printCities(ArrayList<City> cities){
+        //Insert header here
+        System.out.println(String.format("|%-15s | %-10s | %-20s | %-30s|", "City Name", "Country Code", "District", "Population" ));
+        for(City city: cities){
+            String city_string=String.format("|%-15s | %-30s | %-15s | %-30s|", city.name, city.country, city.district, city.population);
+            System.out.println(city_string);
         }
     }
 
-    public static void printSalaries(ArrayList<Employee> employees) {
-        // Print header
-        System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
-        // Loop over all employees in the list
-        for (Employee emp : employees) {
-            String emp_string =
-                    String.format("%-10s %-15s %-20s %-8s",
-                            emp.emp_no, emp.first_name, emp.last_name, emp.salary);
-            System.out.println(emp_string);
-        }
-    }
 }
