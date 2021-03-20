@@ -12,6 +12,9 @@ public class App {
         // Connect to database
         a.connect();
 
+        while (Options(a)) {
+
+        }
 
         a.disconnect();
     }
@@ -65,6 +68,25 @@ public class App {
             }
         }
     }
+
+    public static boolean Options(App a) {
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        {
+            System.out.println("0 " + "Quit");
+            System.out.println("1 " + "All the countries in the world organised by largest population to smallest.");
+        }
+        //input = scanner.nextLine();
+        input=0;
+
+        if (input == 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 
     public Employee getEmployee(int ID) {
         try {
