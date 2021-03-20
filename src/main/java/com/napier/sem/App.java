@@ -6,15 +6,14 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+
         // Create new Application
         App a = new App();
 
         // Connect to database
         a.connect();
-
-        while (Options(a)) {
-
-        }
+        ArrayList<Country> C= a.getCountries_World_By_LS();
+        printCountries(C);
 
         a.disconnect();
     }
@@ -69,23 +68,52 @@ public class App {
         }
     }
 
-    public static boolean Options(App a) {
-        Scanner scanner = new Scanner(System.in);
-        int input;
-        {
-            System.out.println("0 " + "Quit");
-            System.out.println("1 " + "All the countries in the world organised by largest population to smallest.");
-        }
-        //input = scanner.nextLine();
-        input=0;
 
-        if (input == 0) {
-            return false;
-        } else {
-            return true;
-        }
+    public void Countries_World_LS(){
 
     }
+
+    public ArrayList<Country> getCountries_World_By_LS(){
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                            "SELECT code "
+                            + "FROM country";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while(rset.next()){
+                Country country = new Country();
+
+                country.code=rset.getString("code");
+                countries.add(country);
+            }
+            return countries;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public static void printCountries(ArrayList<Country> countries){
+        //Insert header here
+
+        for(Country country: countries){
+            String c_string=String.format("%-10s", country.code);
+            System.out.println(c_string);
+        }
+    }
+
+
+
+
+
+
+
 
 
     public Employee getEmployee(int ID) {
