@@ -80,8 +80,9 @@ public class App {
 
             //Make the SQL string iteslf
             String select =
-                            "SELECT code "
-                            + "FROM country";
+                            "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "ORDER BY population ASC";
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<Country> countries = new ArrayList<Country>();
@@ -89,6 +90,11 @@ public class App {
                 Country country = new Country();
 
                 country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
                 countries.add(country);
             }
             return countries;
@@ -101,9 +107,9 @@ public class App {
 
     public static void printCountries(ArrayList<Country> countries){
         //Insert header here
-
+        System.out.println(String.format("|%-15s | %-30s | %-15s | %-30s | %-15s | %-15s|", "Country Code","Country Name", "Continent", "Region" , "Population", "Capital"));
         for(Country country: countries){
-            String c_string=String.format("%-10s", country.code);
+            String c_string=String.format("|%-15s | %-30s | %-15s | %-30s | %-15d | %-15d|", country.code, country.name, country.continent, country.region, country.population, country.capital);
             System.out.println(c_string);
         }
     }
