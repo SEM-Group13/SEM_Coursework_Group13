@@ -153,7 +153,6 @@ public class App {
         }
     }
 
-
     /**
      * Gets details for one country based on their code
      * Not sure if this is required by specification but is useful for testing
@@ -187,6 +186,38 @@ public class App {
                 countries.add(country);
             }
             return country;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+
+    public ArrayList<City> getTop_N_Cities_World(String dist, int n){
+        try {
+            dist="'" + dist + "'";
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT name, countrycode, district, population "
+                            + "FROM city "
+                            + "WHERE district = " + dist
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
         } catch(Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
