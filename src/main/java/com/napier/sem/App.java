@@ -2,7 +2,6 @@ package com.napier.sem;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -11,7 +10,15 @@ public class App {
         App a = new App();
 
         // Connect to database
-        a.connect();
+        if (args.length < 1)
+        {
+            a.connect("localhost:3306");
+        }
+        else
+        {
+            a.connect(args[0]);
+        }
+
         ArrayList<Country> Coun= a.getCountries_World_By_LS();
         printCountries(Coun);
 
@@ -29,29 +36,39 @@ public class App {
     /**
      * Connect to the MySQL database.
      */
-    public void connect() {
-        try {
+    public void connect(String location)
+    {
+        try
+        {
             // Load Database driver
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e)
+        {
             System.out.println("Could not load SQL driver");
             System.exit(-1);
         }
 
         int retries = 10;
-        for (int i = 0; i < retries; ++i) {
+        for (int i = 0; i < retries; ++i)
+        {
             System.out.println("Connecting to database...");
-            try {
+            try
+            {
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://" + location + "/world?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
-            } catch (SQLException sqle) {
+            }
+            catch (SQLException sqle)
+            {
                 System.out.println("Failed to connect to database attempt " + Integer.toString(i));
                 System.out.println(sqle.getMessage());
-            } catch (InterruptedException ie) {
+            }
+            catch (InterruptedException ie)
+            {
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
@@ -129,6 +146,47 @@ public class App {
                 cities.add(city);
             }
             return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets details for one country based on their code
+     * Not sure if this is required by specification but is useful for testing
+     * @param countryid
+     * @return
+     */
+    public Country getCountry_World_By_Id(String countryid){
+        countryid="'" + countryid + "'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE code=" + countryid;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            Country country = new Country();
+            while(rset.next()){
+
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return country;
         } catch(Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
