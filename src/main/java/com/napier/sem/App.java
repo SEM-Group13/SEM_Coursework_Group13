@@ -145,6 +145,13 @@ public class App {
         }
     }
 
+
+    /**
+     * Gets details for one country based on their code
+     * Not sure if this is required by specification but is useful for testing
+     * @param countryid
+     * @return
+     */
     public Country getCountry_World_By_Id(String countryid){
         countryid="'" + countryid + "'";
         try {

@@ -21,9 +21,14 @@ public class AppIntegrationTest
 
     @Test
     void getCountry_World_By_N(){
+
         Country country = app.getCountry_World_By_Id("CHE");
         assertEquals(country.code, "CHE");
         assertEquals(country.name, "Switzerland");
+        assertEquals(country.continent, "Europe");
+        assertEquals(country.region, "Western Europe");
+        assertEquals(country.population, 7160400);
+        assertEquals(country.capital, 1499);
 
     }
 }
