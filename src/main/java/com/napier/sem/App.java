@@ -142,8 +142,13 @@ public class App {
      */
     public static void printCountries(ArrayList<Country> countries){
         //Insert header here
+        if(countries==null){
+            System.out.println(("No Countries"));
+            return;
+        }
         System.out.println(String.format("|%-15s | %-30s | %-15s | %-40s | %-15s | %-15s|", "Country Code","Country Name", "Continent", "Region" , "Population", "Capital"));
         for(Country country: countries){
+            if(country==null) continue;
             String coun_string=String.format("|%-15s | %-30s | %-15s | %-40s | %-15d | %-15d|", country.code, country.name, country.continent, country.region, country.population, country.capital);
             System.out.println(coun_string);
         }
@@ -154,9 +159,15 @@ public class App {
      * @param cities
      */
     public static void printCities(ArrayList<City> cities){
+        if(cities==null){
+            System.out.println(("No Cities"));
+            return;
+        }
         //Insert header here
         System.out.println(String.format("|%-15s | %-10s | %-20s | %-30s|", "City Name", "Country Code", "District", "Population" ));
         for(City city: cities){
+            if(city==null) continue;
+
             String city_string=String.format("|%-20s | %-10s | %-20s | %-10d|", city.name, city.country, city.district, city.population);
             System.out.println(city_string);
         }
