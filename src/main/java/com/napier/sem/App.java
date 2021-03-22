@@ -2,7 +2,6 @@ package com.napier.sem;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -139,6 +138,40 @@ public class App {
                 cities.add(city);
             }
             return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public Country getCountry_World_By_Id(String countryid){
+        countryid="'" + countryid + "'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE code=" + countryid;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            Country country = new Country();
+            while(rset.next()){
+
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return country;
         } catch(Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");

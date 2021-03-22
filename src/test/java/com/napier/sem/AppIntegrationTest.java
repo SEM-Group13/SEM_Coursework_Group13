@@ -20,8 +20,10 @@ public class AppIntegrationTest
     }
 
     @Test
-    void testGetCity()
-    {
-       //City city=app.get
+    void getCountry_World_By_N(){
+        Country country = app.getCountry_World_By_Id("CHE");
+        assertEquals(country.code, "CHE");
+        assertEquals(country.name, "Switzerland");
+
     }
 }
