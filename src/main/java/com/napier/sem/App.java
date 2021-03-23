@@ -421,7 +421,7 @@ public class App {
         for(City city: cities){
             if(city==null) continue;
 
-            String city_string=String.format("|%-20s | %-10s | %-20s | %-10d|", city.name, city.country, city.district, city.population);
+            String city_string=String.format("|%-20s | %-10s | %-20s | %-30d|", city.name, city.country, city.district, city.population);
             System.out.println(city_string);
         }
     }
