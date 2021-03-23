@@ -194,7 +194,7 @@ public class App {
     }
 
 
-    public ArrayList<City> getTop_N_Cities_World(String dist, int n){
+    public ArrayList<City> getTop_N_Cities_District(String dist, int n){
         try {
             dist="'" + dist + "'";
             //Create SQL statment
