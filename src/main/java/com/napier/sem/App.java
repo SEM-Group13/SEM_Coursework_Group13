@@ -271,6 +271,13 @@ public class App {
         }
     }
 
+
+    /**
+     * Gets the top N most populated capital cities of a continent
+     * @param cont
+     * @param n
+     * @return cities
+     */
     public ArrayList<City> getTop_N_Capital_Cities_Continent(String cont, int n){
         try {
             cont="'" + cont + "'";

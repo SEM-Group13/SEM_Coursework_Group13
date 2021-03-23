@@ -100,5 +100,9 @@ public class AppIntegrationTest
         int n=3;
         ArrayList<City> cities=app.getTop_N_Capital_Cities_Continent("Europe", 3);
         app.printCities(cities);
+
+        cities.get(0).name="Moscow";
+        cities.get(1).name="London";
+        cities.get(2).name="Berlin";
     }
 }
