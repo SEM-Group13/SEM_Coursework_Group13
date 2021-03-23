@@ -69,4 +69,29 @@ public class AppIntegrationTest
         }
         //app.printCities(cities);
     }
+
+    @Test
+    void getTop_N_Countries_World(){
+        int n =3;
+        ArrayList<Country> countries = app.getTop_N_Countries_World(n);
+        ArrayList<Country> test = new ArrayList<Country>();
+
+        Country testcountry1=new Country();
+        Country testcountry2=new Country();
+        Country testcountry3=new Country();
+        testcountry1.code="CHN";
+        testcountry2.code="IND";
+        testcountry3.code="USA";
+
+        test.add(testcountry1);
+        test.add(testcountry2);
+        test.add(testcountry3);
+        //System.out.println(countries);
+//        app.printCountries(countries);
+
+        for(int i=0; i<n; i++){
+            assertEquals(test.get(i).code,countries.get(i).code);
+        }
+
+    }
 }
