@@ -114,4 +114,19 @@ public class AppIntegrationTest {
         assertEquals(cities.get(1).name , "Jakarta");
         assertEquals(cities.get(2).name , "Ciudad de México");
     }
+
+    @Test
+    void getCountries_Continent_By_LS(){
+        ArrayList<Country> countries = app.getCountries_Continent_By_LS("Europe");
+        app.printCountries(countries);
+
+        for (int i =0; i<countries.size();i++){
+            assertEquals(countries.get(i).continent, "Europe");
+            if(i>0){
+                assertTrue(countries.get(i).population>countries.get(i-1).population);
+
+            }
+        }
+
+    }
 }
