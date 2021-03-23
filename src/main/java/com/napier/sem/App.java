@@ -417,7 +417,7 @@ public class App {
             return;
         }
         //Insert header here
-        System.out.println(String.format("|%-15s | %-10s | %-20s | %-30s|", "City Name", "Country Code", "District", "Population" ));
+        System.out.println(String.format("|%-20s | %-10s | %-20s | %-30s|", "City Name", "Country Code", "District", "Population" ));
         for(City city: cities){
             if(city==null) continue;
 
