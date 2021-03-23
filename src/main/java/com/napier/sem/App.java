@@ -271,6 +271,40 @@ public class App {
         }
     }
 
+    public ArrayList<City> getTop_N_Capital_Cities_Continent(String cont, int n){
+        try {
+            cont="'" + cont + "'";
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code)"
+                            + "WHERE continent = " + cont
+                            + " AND capital=ID"
+                            +" ORDER BY city.population DESC"
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+            //System.out.println("IGNORE ME");
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("city.Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
+            return null;
+        }
+    }
+
     /**
      * Outputs report of countries table
      * @param countries

@@ -94,4 +94,11 @@ public class AppIntegrationTest
         }
 
     }
+
+    @Test
+    void getTop_N_Captial_Cities_Continent(){
+        int n=3;
+        ArrayList<City> cities=app.getTop_N_Capital_Cities_Continent("Europe", 3);
+        app.printCities(cities);
+    }
 }
