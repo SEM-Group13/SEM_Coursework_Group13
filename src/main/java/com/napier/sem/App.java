@@ -234,6 +234,12 @@ public class App {
     }
 
 
+    /**
+     * Gets top N Cities in a district
+     * @param dist
+     * @param n
+     * @return cities
+     */
     public ArrayList<City> getTop_N_Cities_District(String dist, int n){
         try {
             dist="'" + dist + "'";
