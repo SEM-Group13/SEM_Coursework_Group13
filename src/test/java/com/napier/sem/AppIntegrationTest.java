@@ -62,10 +62,9 @@ public class AppIntegrationTest {
             assertEquals(cities.get(i).country, test.get(i).country);
             assertEquals(cities.get(i).district, test.get(i).district);
             assertEquals(cities.get(i).population, test.get(i).population);
-//            assertEquals(cities.get(i).name, test.get(i).name);
 
         }
-        //app.printCities(cities);
+        app.printCities(cities);
     }
 
     @Test
@@ -162,4 +161,14 @@ public class AppIntegrationTest {
         }
 
     }
+
+    @Test
+    void getPopulation_City()
+    {
+        City city = app.getPopulation_City("Edinburgh");
+        assertEquals(city.name, "Edinburgh");
+        assertEquals(city.population, 450180);
+    }
+
+
 }

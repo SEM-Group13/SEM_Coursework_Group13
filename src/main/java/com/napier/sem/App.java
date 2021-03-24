@@ -19,11 +19,15 @@ public class App {
             a.connect(args[0]);
         }
 
+        System.out.println("Testing 1 2 3 ");
+
+        /*
         ArrayList<Country> Coun= a.getCountries_World_By_LS();
         printCountries(Coun);
 
         ArrayList<City> City=a.getCities_World_By_LS();
         printCities(City);
+        */
 
         a.disconnect();
     }
@@ -94,10 +98,10 @@ public class App {
      */
     public ArrayList<Country> getCountries_World_By_LS(){
         try {
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                             "SELECT code, name, continent, region, population, capital "
                             + "FROM country "
@@ -126,10 +130,10 @@ public class App {
 
     public ArrayList<City> getCities_World_By_LS(){
         try {
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                     "SELECT name, countrycode, district, population "
                             + "FROM city "
@@ -191,10 +195,10 @@ public class App {
     public ArrayList<City> getCities_Continent_By_LS(String cont){
         cont="'"+cont+"'";
         try {
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                     "SELECT city.name, countrycode, district, city.population, continent "
                             + "FROM city "
@@ -221,16 +225,50 @@ public class App {
     }
 
     /**
-     * get Countries of a continent sorted by large to small
-     * @return countries
+     * Get the population of a city
+     * @return city
      */
+    public City getPopulation_City(String city_name) {
+        city_name="'"+city_name+"'";
+        try{
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Define SQL statement
+            String select =
+                    "SELECT  name, population "
+                            + "FROM city "
+                            + "WHERE name = " + city_name;
+
+            // Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            // Store data as type City
+            City city = new City();
+            while(rset.next()){
+                city.name=rset.getString("name");
+                city.population=rset.getInt("population");
+            }
+            return city;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city details");
+            return null;
+        }
+    }
+
+
+        /**
+         * get Countries of a continent sorted by large to small
+         * @return countries
+         */
     public ArrayList<Country> getCountries_Continent_By_LS(String cont){
         cont="'"+cont+"'";
         try {
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                     "SELECT code, name, continent, region, population, capital "
                             + "FROM country "
@@ -261,10 +299,10 @@ public class App {
     public ArrayList<Country> getCountries_Region_By_LS(String region){
         region="'"+region+"'";
         try {
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                     "SELECT code, name, continent, region, population, capital "
                             + "FROM country "
