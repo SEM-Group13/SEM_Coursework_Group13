@@ -153,6 +153,73 @@ public class App {
         }
     }
 
+
+    public Country getCountry_From_City(City city){
+        String countryid="'" + city.country + "'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE code=" + countryid;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            Country country = new Country();
+            while(rset.next()){
+
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return country;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> getCities_Continent_By_LS(String cont){
+        cont="'"+cont+"'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE continent="+cont
+                            + " ORDER BY city.population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
     /**
      * get Countries of a continent sorted by large to small
      * @return countries

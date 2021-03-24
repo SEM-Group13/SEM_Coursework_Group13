@@ -123,9 +123,27 @@ public class AppIntegrationTest {
         for (int i =0; i<countries.size();i++){
             assertEquals(countries.get(i).continent, "Europe");
             if(i>0){
-                assertTrue(countries.get(i).population>countries.get(i-1).population);
+                assertTrue(countries.get(i).population>=countries.get(i-1).population);
 
             }
+        }
+
+    }
+    @Test
+    void getCities_Continent_By_LS(){
+        ArrayList<City> cities = app.getCities_Continent_By_LS("Europe");
+        app.printCities(cities);
+        Country country=new Country();
+        for (int i =0; i<cities.size();i++){
+            //assertEquals(cities.get(i).continent, "Europe");
+            country= app.getCountry_From_City(cities.get(i));
+            assertEquals(country.continent, "Europe");
+            if(i>0){
+                assertTrue(cities.get(i).population>=cities.get(i-1).population);
+
+            }
+
+
         }
 
     }
