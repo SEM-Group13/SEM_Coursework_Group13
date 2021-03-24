@@ -170,5 +170,12 @@ public class AppIntegrationTest {
         assertEquals(city.population, 450180);
     }
 
+    @Test
+    void getPopulation_Country()
+    {
+        Country country = app.getPopulation_Country("Aruba");
+        assertEquals(country.name, "Aruba");
+        assertEquals(country.population, 103000);
+    }
 
 }

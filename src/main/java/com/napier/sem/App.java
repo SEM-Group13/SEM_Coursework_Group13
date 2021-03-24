@@ -559,4 +559,37 @@ public class App {
             return null;
         }
     }
+
+    /**
+     * Get the population of a country
+     * @return country
+     */
+    public Country getPopulation_Country(String country_name){
+        country_name = "'" + country_name + "'";
+        try{
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+            //Define SQL statement
+            String select =
+                    "SELECT  name, population "
+                            + "FROM country "
+                            + "WHERE name = " + country_name;
+
+            // Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            // Store data as type Country
+            Country country = new Country();
+            while (rset.next()) {
+                country.name = rset.getString("name");
+                country.population = rset.getInt("population");
+            }
+            return country;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
 }
