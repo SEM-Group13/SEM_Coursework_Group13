@@ -19,15 +19,11 @@ public class App {
             a.connect(args[0]);
         }
 
-        System.out.println("Testing 1 2 3 ");
-
-        /*
         ArrayList<Country> Coun= a.getCountries_World_By_LS();
         printCountries(Coun);
 
         ArrayList<City> City=a.getCities_World_By_LS();
         printCities(City);
-        */
 
         a.disconnect();
     }
