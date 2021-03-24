@@ -178,4 +178,12 @@ public class AppIntegrationTest {
         assertEquals(country.population, 103000);
     }
 
+    @Test
+    void getPopulation_World()
+    {
+        double population = app.getPopulation_World();
+        assertEquals(population, 6.07874945E9);
+    }
+
+
 }

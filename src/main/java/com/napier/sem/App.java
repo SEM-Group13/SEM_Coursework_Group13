@@ -592,4 +592,36 @@ public class App {
         }
     }
 
+    /**
+     * Get the total population of each country
+     * @return sum
+     */
+
+    public double getPopulation_World()
+    {
+        double sum = 0;
+        try{
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+            //Define SQL statement
+            String select =
+                    "SELECT SUM(population) "
+                            + "AS population "
+                            + "FROM country";
+
+            // Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            // Store data as type Country
+
+            while (rset.next()) {
+                sum = rset.getDouble("population");
+            }
+            return sum;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return 0;
+        }
+    }
 }
