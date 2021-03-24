@@ -564,9 +564,11 @@ public class App {
      * Get the population of a country
      * @return country
      */
-    public Country getPopulation_Country(String country_name){
+    public Country getPopulation_Country(String country_name)
+    {
         country_name = "'" + country_name + "'";
-        try{
+        try
+        {
             //Create SQL statement
             Statement stmt = con.createStatement();
             //Define SQL statement
@@ -585,7 +587,9 @@ public class App {
                 country.population = rset.getInt("population");
             }
             return country;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
             return null;
@@ -614,14 +618,55 @@ public class App {
 
             // Store data as type Country
 
-            while (rset.next()) {
+            while (rset.next())
+            {
                 sum = rset.getDouble("population");
             }
             return sum;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
             return 0;
         }
     }
+
+    /**
+     * Get the population of a continent
+     * @return sum
+     */
+    public double getPopulation_Continent(String cont_name)
+    {
+        double sum = 0;
+        cont_name = "'" + cont_name + "'";
+        try {
+            //Create SQL Statement
+            Statement stmt = con.createStatement();
+            //Define SQL statement
+            String select =
+                    "SELECT SUM(population) "
+                            + "AS population "
+                            + "FROM country "
+                            + "WHERE continent = " + cont_name;
+
+            //Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            //Store result as type Double
+            while (rset.next())
+            {
+                sum = rset.getDouble("population");
+            }
+            return sum;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get continent details");
+            return 0;
+        }
+    }
+
+
 }

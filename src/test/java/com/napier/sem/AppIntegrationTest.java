@@ -185,5 +185,11 @@ public class AppIntegrationTest {
         assertEquals(population, 6.07874945E9);
     }
 
+    @Test
+    void getPopulation_Continent()
+    {
+        double population = app.getPopulation_Continent("Asia");
+        assertEquals(population, 3.7050257E9);
+    }
 
 }
