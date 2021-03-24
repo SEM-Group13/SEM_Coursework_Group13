@@ -220,40 +220,6 @@ public class App {
         }
     }
 
-    /**
-     * Get the population of a city
-     * @return city
-     */
-    public City getPopulation_City(String city_name) {
-        city_name="'"+city_name+"'";
-        try{
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Define SQL statement
-            String select =
-                    "SELECT  name, population "
-                            + "FROM city "
-                            + "WHERE name = " + city_name;
-
-            // Return SQL result
-            ResultSet rset = stmt.executeQuery(select);
-
-            // Store data as type City
-            City city = new City();
-            while(rset.next()){
-                city.name=rset.getString("name");
-                city.population=rset.getInt("population");
-            }
-            return city;
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get city details");
-            return null;
-        }
-    }
-
-
         /**
          * get Countries of a continent sorted by large to small
          * @return countries
@@ -561,4 +527,36 @@ public class App {
         }
     }
 
+    /**
+     * Get the population of a city
+     * @return city
+     */
+    public City getPopulation_City(String city_name) {
+        city_name = "'" + city_name + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Define SQL statement
+            String select =
+                    "SELECT  name, population "
+                            + "FROM city "
+                            + "WHERE name = " + city_name;
+
+            // Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            // Store data as type City
+            City city = new City();
+            while (rset.next()) {
+                city.name = rset.getString("name");
+                city.population = rset.getInt("population");
+            }
+            return city;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city details");
+            return null;
+        }
+    }
 }
