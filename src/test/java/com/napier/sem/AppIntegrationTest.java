@@ -147,4 +147,19 @@ public class AppIntegrationTest {
         }
 
     }
+
+    @Test
+    void getCountries_Region_By_LS(){
+        ArrayList<Country> countries = app.getCountries_Region_By_LS("Western Europe");
+        app.printCountries(countries);
+
+        for (int i =0; i<countries.size();i++){
+            assertEquals(countries.get(i).region, "Western Europe");
+            if(i>0){
+                assertTrue(countries.get(i).population>=countries.get(i-1).population);
+
+            }
+        }
+
+    }
 }

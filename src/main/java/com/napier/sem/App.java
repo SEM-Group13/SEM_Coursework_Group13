@@ -258,6 +258,40 @@ public class App {
         }
     }
 
+    public ArrayList<Country> getCountries_Region_By_LS(String region){
+        region="'"+region+"'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE region=" + region
+                            + " ORDER BY population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while(rset.next()){
+                Country country = new Country();
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
     /**
      * Gets details for one country based on their code
      * Not sure if this is required by specification but is useful for testing
