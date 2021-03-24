@@ -704,4 +704,40 @@ public class App {
             return 0;
         }
     }
+
+    /**
+     * Get the population of a district
+     * @return sum
+     */
+    public double getPopulation_District(String district_name)
+    {
+        double sum = 0;
+        district_name = "'" + district_name + "'";
+        try {
+            //Create SQL Statement
+            Statement stmt = con.createStatement();
+            //Define SQL statement
+            String select =
+                    "SELECT SUM(population) "
+                            + "AS population "
+                            + "FROM city "
+                            + "WHERE district = " + district_name;
+
+            //Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            //Store result as type Double
+            while (rset.next())
+            {
+                sum = rset.getDouble("population");
+            }
+            return sum;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get district details");
+            return 0;
+        }
+    }
 }

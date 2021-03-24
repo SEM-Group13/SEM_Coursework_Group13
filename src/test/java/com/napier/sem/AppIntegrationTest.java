@@ -196,8 +196,14 @@ public class AppIntegrationTest {
     @Test
     void getPopulation_Region()
     {
-     double population = app.getPopulation_Region("Central Africa");
-     assertEquals(population, 9.5652E7);
+        double population = app.getPopulation_Region("Central Africa");
+        assertEquals(population, 9.5652E7);
     }
 
+    @Test
+    void getPopulation_District()
+    {
+        double population = app.getPopulation_District("Scotland");
+        assertEquals(population, 1429620.0);
+    }
 }
