@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -597,7 +598,7 @@ public class App {
     }
 
     /**
-     * Get the total population of each country
+     * Get the sum population of each country
      * @return sum
      */
 
@@ -668,5 +669,39 @@ public class App {
         }
     }
 
+    /**
+     * Get the population of a region
+     * @return sum
+     */
+    public double getPopulation_Region(String region_name)
+    {
+        double sum = 0;
+        region_name = "'" + region_name + "'";
+        try {
+            //Create SQL Statement
+            Statement stmt = con.createStatement();
+            //Define SQL statement
+            String select =
+                    "SELECT SUM(population) "
+                            + "AS population "
+                            + "FROM country "
+                            + "WHERE region = " + region_name;
 
+            //Return SQL result
+            ResultSet rset = stmt.executeQuery(select);
+
+            //Store result as type Double
+            while (rset.next())
+            {
+                sum = rset.getDouble("population");
+            }
+            return sum;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get region details");
+            return 0;
+        }
+    }
 }

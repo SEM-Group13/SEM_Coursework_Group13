@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -190,6 +191,13 @@ public class AppIntegrationTest {
     {
         double population = app.getPopulation_Continent("Asia");
         assertEquals(population, 3.7050257E9);
+    }
+
+    @Test
+    void getPopulation_Region()
+    {
+     double population = app.getPopulation_Region("Central Africa");
+     assertEquals(population, 9.5652E7);
     }
 
 }
