@@ -45,7 +45,7 @@ public class AppIntegrationTest {
      * Check that the output does not return more than the specified limit
      */
     @Test
-    void getTop_N_Cities_World() {
+    void getTop_N_Cities_District() {
         int n = 3;
         ArrayList<City> cities = app.getTop_N_Cities_District("Buenos Aires", n); //Test should still work if "Buenos Aires" is not in db
         assert (cities.size() <= n);
