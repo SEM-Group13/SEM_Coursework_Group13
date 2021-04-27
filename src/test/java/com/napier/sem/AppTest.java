@@ -12,47 +12,37 @@ public class AppTest
 {
     static App app;
 
+    /**
+     * Create a new app object for use in most tests
+     */
     @BeforeAll
     static void init()
     {
         app = new App();
     }
 
+    /**
+     * Attempt to use app.printCities without any meaningful input
+     */
     @Test
     void printCitiesTestNull()
     {
         app.printCities(null);
     }
 
-    @Test
-    void printCountriesTestNull(){
-        app.printCountries(null);
-    }
-
+    /**
+     * Attempts to use app.printCities with a cities arraylist with nothing in it
+     */
     @Test
     void printCitiesTestEmpty(){
         ArrayList<City> cities = new ArrayList<City>();
         app.printCities(cities);
     }
 
-    @Test
-    void printCountriesTestEmpty(){
-        ArrayList<Country> countries = new ArrayList<Country>();
-        app.printCountries(countries);
-    }
 
-    @Test void printCititesTestContainsNull(){
-        ArrayList<City> cities = new ArrayList<City>();
-        cities.add(null);
-        app.printCities(cities);
-    }
-
-    @Test void printCountriesTestContainsNull(){
-        ArrayList<Country> countries = new ArrayList<Country>();
-        countries.add(null);
-        app.printCountries(countries);
-    }
-
+    /**
+     * Print cities with sample data
+     */
     @Test void printCities(){
         ArrayList<City> cities = new ArrayList<City>();
         City c = new City();
@@ -65,6 +55,9 @@ public class AppTest
         app.printCities(cities);
     }
 
+    /**
+     * Print countries with sample data
+     */
     @Test void printCountries(){
         ArrayList<Country> countries = new ArrayList<Country>();
         Country c = new Country();
