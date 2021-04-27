@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,6 +21,8 @@ public class AppTest
     {
         app = new App();
     }
+
+
 
     /**
      * Attempt to use app.printCities without any meaningful input

@@ -1,5 +1,6 @@
 package com.napier.sem;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,6 +20,11 @@ public class AppIntegrationTest {
     static void init() {
         app = new App();
         app.connect("localhost:33060");
+    }
+
+    @AfterAll
+    static void deInit(){
+        app.disconnect();
     }
 
 //    @Test
@@ -87,6 +93,13 @@ public class AppIntegrationTest {
         }
     }
 
+    @Test
+    void getPopulation_World() {
+double pop = app.getPopulation_World();
+
+assert(pop>=0);
+    }
+
     /*
     @Test
     void getTop_N_Captial_Cities_World() {
@@ -148,12 +161,14 @@ public class AppIntegrationTest {
 
     }*/
 
-//    @Test
-//    void getPopulation_City() {
-//        City city = app.getPopulation_City("Edinburgh");
-//        assertEquals(city.name, "Edinburgh");
-//        assertEquals(city.population, 450180);
-//    }
+    @Test
+    void getPopulation_Country() {
+        ArrayList<Country> countries = app.getTop_N_Countries_World(1);
+        Country country = app.getPopulation_Country(countries.get(0).name);
+
+//        assert(country.population>=0);
+        assertEquals(countries.get(0).population, country.population);
+    }
 //
 //    @Test
 //    void getPopulation_Country() {
