@@ -491,6 +491,172 @@ public class App {
         }
     }
 
+    public ArrayList<Country> get_Top_N_Countries_Continent(String cont, int n){
+        cont="'"+cont+"'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE continent=" + cont
+                            + " ORDER BY population DESC "
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while(rset.next()){
+                Country country = new Country();
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<Country> get_Top_N_Countries_Region(String reg, int n){
+        reg="'"+reg+"'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE region=" + reg
+                            + " ORDER BY population DESC "
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while(rset.next()){
+                Country country = new Country();
+
+                country.code=rset.getString("code");
+                country.name=rset.getString("name");
+                country.continent=rset.getString("continent");
+                country.region=rset.getString("region");
+                country.population=rset.getInt("population");
+                country.capital=rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> getCities_Region_By_LS(String reg){
+        reg="'"+reg+"'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, region "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE region="+reg
+                            + " ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> getCities_Country_By_LS(String cont){
+        cont="'"+cont+"'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE country.name="+cont
+                            + " ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public ArrayList<City> getCities_District_By_LS(String dist){
+        dist="'"+dist+"'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE district="+dist
+                            + " ORDER BY city.population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while(rset.next()){
+                City city = new City();
+                city.name=rset.getString("Name");
+                city.country=rset.getString("CountryCode");
+                city.district=rset.getString("District");
+                city.population=rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
     /**
      * Outputs report of countries table
      * @param countries
@@ -601,7 +767,6 @@ public class App {
      * Get the sum population of each country
      * @return sum
      */
-
     public double getPopulation_World()
     {
         double sum = 0;
@@ -632,6 +797,7 @@ public class App {
             return 0;
         }
     }
+
 
     /**
      * Get the population of a continent

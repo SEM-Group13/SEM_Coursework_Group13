@@ -169,6 +169,29 @@ assert(pop>=0);
 //        assert(country.population>=0);
         assertEquals(countries.get(0).population, country.population);
     }
+
+    @Test
+    void get_Top_N_Countries_Continent(){
+        ArrayList<Country> countries = app.get_Top_N_Countries_Continent("Europe", 3);
+        assert(countries.size()>=0);
+    }
+
+    @Test
+    void get_Top_N_Countries_Region(){
+        ArrayList<Country> countries = app.get_Top_N_Countries_Region("Western Europe", 3);
+        assert(countries.size()>=0);
+    }
+
+    @Test
+    void getCities_Region_By_LS(){
+        ArrayList<City> cities = app.getCities_Region_By_LS("Western Europe");
+
+    }
+
+    @Test
+    void getCities_Country_By_LS(){
+        ArrayList<City> cities =app.getCities_Country_By_LS("France");
+    }
 //
 //    @Test
 //    void getPopulation_Country() {
