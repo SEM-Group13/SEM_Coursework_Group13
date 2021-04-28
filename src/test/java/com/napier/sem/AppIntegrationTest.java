@@ -170,6 +170,7 @@ assert(pop>=0);
         assertEquals(countries.get(0).population, country.population);
     }
 
+    /*
     @Test
     void get_Top_N_Countries_Continent(){
         ArrayList<Country> countries = app.get_Top_N_Countries_Continent("Europe", 3);
@@ -192,6 +193,11 @@ assert(pop>=0);
     void getCities_Country_By_LS(){
         ArrayList<City> cities =app.getCities_Country_By_LS("France");
     }
+
+    @Test
+    void getCities_District_By_LS(){
+        ArrayList<City> cities=app.getCities_District_By_LS("Provence-Alpes-Côte");
+    }*/
 //
 //    @Test
 //    void getPopulation_Country() {
