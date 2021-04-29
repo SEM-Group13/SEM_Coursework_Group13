@@ -685,7 +685,6 @@ public class App {
         }
     }
 
-
     public Country getCountry_From_City(City city) {
         String countryid = "'" + city.country + "'";
         try {
@@ -758,6 +757,43 @@ public class App {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Get all Capital Cities in the World, large to small
+     * @param n
+     * @return
+     */
+    public ArrayList<City> getCapital_Cities_World_By_LS(int n) {
+        try {
+
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, city.district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE capital=ID "
+                            + "ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
             return null;
         }
     }
