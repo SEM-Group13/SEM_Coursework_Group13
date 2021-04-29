@@ -763,12 +763,10 @@ public class App {
 
     /**
      * Get all Capital Cities in the World, large to small
-     * @param n
      * @return
      */
-    public ArrayList<City> getCapital_Cities_World_By_LS(int n) {
+    public ArrayList<City> getCapital_Cities_World_By_LS() {
         try {
-
             //Create SQL statement
             Statement stmt = con.createStatement();
 
@@ -799,7 +797,46 @@ public class App {
     }
 
     /**
-     * Gets the top N most populated capital cities of the world
+     * Get all Capital Cities in a Continent, large to small
+     * @param continent
+     * @return
+     */
+    public ArrayList<City> getCapital_Cities_Continent_By_LS(String continent) {
+        try {
+            continent = "'" + continent + "'";
+
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, city.district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE continent = " + continent
+                            + " AND capital=ID "
+                            + "ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets the top N most populated capital cities of the world, large to small
      * @param n
      * @return cities
      */
@@ -838,7 +875,7 @@ public class App {
     }
 
     /**
-     * Gets the top N most populated capital cities of a continent
+     * Gets the top N most populated capital cities of a continent, large to small
      *
      * @param cont
      * @param n
@@ -879,7 +916,7 @@ public class App {
     }
 
     /**
-     * Gets top N populated capital Cities in a Region
+     * Gets top N populated capital Cities in a Region, large to small
      * @param region
      * @param n
      * @return
