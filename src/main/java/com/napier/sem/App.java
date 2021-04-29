@@ -852,7 +852,7 @@ public class App {
                     "SELECT city.name, countrycode, city.district, city.population, code "
                             + "FROM city "
                             + "JOIN country ON (countrycode=code) "
-                            + "WHERE continent = " + region
+                            + "WHERE region = " + region
                             + " AND capital=ID "
                             + "ORDER BY city.population DESC";
             ResultSet rset = stmt.executeQuery(select);
