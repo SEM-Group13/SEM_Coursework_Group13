@@ -147,13 +147,6 @@ public class App {
         try {
             Statement stmt = con.createStatement();
 
-//            String select = "SELECT country.continent, SUM(country.population)" +
-//                    " ,SUM(SELECT city.population" +
-//                    " FROM city" +
-//                    " JOIN country ON city.country=country.code" +
-//                    " WHERE country.continent="+cont + ")"+
-//                    " FROM country" +
-//                    " WHERE country.continent=" + cont;
             String select = "SELECT country.continent, SUM(country.population), "+
                     " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")"+
                     " FROM country WHERE country.continent="+cont
@@ -165,10 +158,70 @@ public class App {
             while (rset.next()) {
                 population.place = rset.getString("country.continent");
                 population.total = rset.getInt("SUM(country.population)");
-                population.urban= rset.getInt( " SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")");
                 population.rural=population.total-population.urban;
-                population.pUrban=(population.urban/population.total)*100;
-                population.pRural=(population.rural/population.total)*100;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public Population get_Urban_Rural_Percentage_Region(String region) {
+        region = "'" + region + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+            String select = "SELECT country.region, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")"+
+                    " FROM country WHERE country.region="+region
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.region");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    public Population get_Urban_Rural_Percentage_Country(String country) {
+        country = "'" + country + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+            String select = "SELECT country.name, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")"+
+                    " FROM country WHERE country.name="+country
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.name");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
                 populations.add(population);
             }
             return population;
@@ -756,6 +809,19 @@ public class App {
 
             String city_string = String.format("|%-20s | %-15s | %-20s | %-30d|", city.name, city.country, city.district, city.population);
             System.out.println(city_string);
+        }
+    }
+
+    public static void printPopulations(ArrayList<Population> populations){
+        if(populations==null){
+            System.out.println("No Populations");
+            return;
+        }
+        System.out.println(String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", "Place", "Total Pop", "% Urban", "Total Urban", "% Rural", "Total Rural"));
+        for(Population population: populations){
+            if(population==null) continue;
+            String pop_string = String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", population.place, population.total, population.pUrban, population.urban, population.pRural, population.rural);
+            System.out.println(pop_string);
         }
     }
 
