@@ -142,6 +142,42 @@ public class App {
         }
     }
 
+    public Population get_Urban_Rural_Percentage_Continent(String cont) {
+        cont = "'" + cont + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+//            String select = "SELECT country.continent, SUM(country.population)" +
+//                    " ,SUM(SELECT city.population" +
+//                    " FROM city" +
+//                    " JOIN country ON city.country=country.code" +
+//                    " WHERE country.continent="+cont + ")"+
+//                    " FROM country" +
+//                    " WHERE country.continent=" + cont;
+            String select = "SELECT country.continent, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")"+
+                    " FROM country WHERE country.continent="+cont
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.continent");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( " SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(population.urban/population.total)*100;
+                population.pRural=(population.rural/population.total)*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
 
     public Country getCountry_From_City(City city) {
         String countryid = "'" + city.country + "'";
@@ -176,6 +212,7 @@ public class App {
             return null;
         }
     }
+
 
     public ArrayList<City> getCities_Continent_By_LS(String cont) {
         cont = "'" + cont + "'";
