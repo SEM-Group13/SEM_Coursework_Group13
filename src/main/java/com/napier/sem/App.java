@@ -323,7 +323,6 @@ public class App {
         }
     }
 
-
     /**
      * Get the top n population countries in the world
      *
@@ -360,6 +359,40 @@ public class App {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get Country details");
+            return null;
+        }
+    }
+
+    /**
+     * Get top N Cities in the World
+     * @param n
+     * @return
+     */
+    public ArrayList<City> getTop_N_Cities_World(int n) {
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT name, countrycode, population "
+                            + "FROM city "
+                            + "ORDER BY population DESC "
+                            + "LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryCode");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
             return null;
         }
     }
@@ -584,40 +617,6 @@ public class App {
                 city.name = rset.getString("city.Name");
                 city.country = rset.getString("CountryCode");
                 city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get City details");
-            return null;
-        }
-    }
-
-    /**
-     * Get top N Cities in the World
-     * @param n
-     * @return
-     */
-    public ArrayList<City> getTop_N_Cities_World(int n) {
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT name, countrycode, population "
-                            + "FROM city "
-                            + "ORDER BY population DESC "
-                            + " LIMIT " + n;
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
                 city.population = rset.getInt("Population");
                 cities.add(city);
             }
