@@ -248,6 +248,11 @@ public class App {
         }
     }
 
+    /**
+     * Get Countries by Region, ordered by Population
+     * @param region
+     * @return
+     */
     public ArrayList<Country> getCountries_Region_By_LS(String region) {
         region = "'" + region + "'";
         try {
@@ -343,6 +348,47 @@ public class App {
                             + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country country = new Country();
+                country.code = rset.getString("code");
+                country.name = rset.getString("name");
+                country.continent = rset.getString("continent");
+                country.region = rset.getString("region");
+                country.population = rset.getInt("population");
+                country.capital = rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get Country details");
+            return null;
+        }
+    }
+
+    /**
+     * Get top N populated Countries in a Continent
+     * @param continent
+     * @param n
+     * @return
+     */
+    public ArrayList<Country> getTop_N_Countries_Continent(String continent, int n) {
+        try {
+            continent = "'" + continent + "'";
+
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE continent=" + continent
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
