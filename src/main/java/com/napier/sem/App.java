@@ -365,6 +365,43 @@ public class App {
     }
 
     /**
+     * Get top N Cities in a Continent
+     * @param continent
+     * @param n
+     * @return
+     */
+    public ArrayList<City> getTop_N_Cities_Continent(String continent, int n) {
+        continent = "'" + continent + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, city.countrycode, country.continent, city.population "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE country.continent= " + continent
+                            + " LIMIT  " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.name");
+                city.country = rset.getString("CountryCode");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
      * Get top N Cities in a Region
      * @param region
      * @param n
