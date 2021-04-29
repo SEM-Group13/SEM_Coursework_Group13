@@ -415,7 +415,8 @@ public class App {
                             + "FROM city "
                             + "JOIN country ON (countrycode=code) "
                             + "WHERE country.continent= " + continent
-                            + " LIMIT  " + n;
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -452,7 +453,8 @@ public class App {
                             + "FROM city "
                             + "JOIN country ON (countrycode=code) "
                             + "WHERE country.region= " + region
-                            + " LIMIT  " + n;
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -489,7 +491,8 @@ public class App {
                             + "FROM city "
                             + "JOIN country ON (countrycode=code) "
                             + "WHERE country.name= " + country
-                            + " LIMIT  " + n;
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -518,15 +521,16 @@ public class App {
     public ArrayList<City> getTop_N_Cities_District(String dist, int n) {
         try {
             dist = "'" + dist + "'";
-            //Create SQL statment
+            //Create SQL statement
             Statement stmt = con.createStatement();
 
-            //Make the SQL string iteslf
+            //Make the SQL string itself
             String select =
                     "SELECT name, countrycode, district, population "
                             + "FROM city "
                             + "WHERE district = " + dist
-                            + " LIMIT " + n;
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
