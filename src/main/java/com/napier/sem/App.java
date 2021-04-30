@@ -14,7 +14,7 @@ public class App {
 
         // Connect to database
         if (args.length < 1) {
-            a.connect("localhost:3306");
+            a.connect("localhost:33060");
         } else {
             a.connect(args[0]);
         }
@@ -148,6 +148,10 @@ public class App {
 
         System.out.println("example 31");
         System.out.println(a.getPopulation_City("Paris"));
+
+        System.out.println("example 32");
+        String[] langs = {"Chinese", "English", "Hindi", "Spanish", "Arabic"};
+        a.languageReport(langs);
 
         a.disconnect();
     }
