@@ -27,4 +27,11 @@ public class Language {
      * Number of people in country who speak
      */
     public int pop;
+
+    /**
+     * Total number of speakers
+     */
+    public int totalpop;
+
+
 }

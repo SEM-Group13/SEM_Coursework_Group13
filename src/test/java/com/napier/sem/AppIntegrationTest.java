@@ -40,7 +40,9 @@ public class AppIntegrationTest {
 //    }
 @Test
 void howManyPeopleSpeak(){
-        System.out.println(app.howManyPeopleSpeak("English"));
+//        System.out.println(app.howManyPeopleSpeak("English"));
+    String[] langs={"English", "Arabic"};
+    app.languageReport(langs);
 }
     /**
      * Test that app.getTop_N_Cities_District() can be printed with app.printCities

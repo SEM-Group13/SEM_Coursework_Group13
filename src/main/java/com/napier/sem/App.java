@@ -3,6 +3,8 @@ package com.napier.sem;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class App {
     public static void main(String[] args) {
@@ -16,12 +18,136 @@ public class App {
         } else {
             a.connect(args[0]);
         }
+        int n =4;
+        ArrayList<Country> countries = new ArrayList<Country>();
 
-        ArrayList<Country> Coun = a.getCountries_World_By_LS();
-        printCountries(Coun);
 
-        ArrayList<City> City = a.getCities_World_By_LS();
-        printCities(City);
+        System.out.println("example 1");
+        countries= a.getCountries_World_By_LS();
+        printCountries(countries);
+
+        System.out.println("example 2");
+        countries=a.getCountries_Continent_By_LS("Europe");
+        printCountries(countries);
+
+        System.out.println("example 3");
+        countries=a.getCountries_Region_By_LS("Western Europe");
+        printCountries(countries);
+
+        System.out.println("example 4");
+        countries=a.getTop_N_Countries_World(n);
+        printCountries(countries);
+
+        System.out.println("example 5");
+        countries=a.get_Top_N_Countries_Continent("Europe", n);
+        printCountries(countries);
+
+        System.out.println("example 6");
+        countries=a.getTop_N_Countries_Region("Western Europe", n);
+        printCountries(countries);
+
+        ArrayList<City> cities = new ArrayList<City>();
+        System.out.println("example 7");
+        cities=a.getCities_World_By_LS();
+        printCities(cities);
+
+        System.out.println("example 8");
+        cities=a.getCities_Continent_By_LS("Europe");
+        printCities(cities);
+
+        System.out.println("example 9");
+        cities=a.getCities_Region_By_LS("Western Europe");
+        printCities(cities);
+
+        System.out.println("example 10");
+        cities=a.getCities_Country_By_LS("France");
+        printCities(cities);
+
+        System.out.println("example 11");
+        cities=a.getCities_District_By_LS("Île-de-France");
+        printCities(cities);
+
+        System.out.println("example 12");
+        cities=a.getTop_N_Cities_World(n);
+        printCities(cities);
+
+        System.out.println("example 13");
+        cities=a.getTop_N_Cities_Continent("Europe", n);
+        printCities(cities);
+
+        System.out.println("example 14");
+        cities=a.getTop_N_Cities_Region("Western Europe", n);
+        printCities(cities);
+
+        System.out.println("example 15");
+        cities=a.getTop_N_Cities_Country("France", n);
+        printCities(cities);
+
+        System.out.println("example 16");
+        cities=a.getTop_N_Cities_District("Île-de-France", n);
+        printCities(cities);
+
+        System.out.println("example 17");
+        cities=a.getCapital_Cities_World_By_LS();
+        printCities(cities);
+
+        System.out.println("example 18");
+        cities=a.getCapital_Cities_Continent_By_LS("Europe");
+        printCities(cities);
+
+        System.out.println("example 19");
+        cities=a.getCapital_Cities_Region_By_LS("Western Europe");
+        printCities(cities);
+
+        System.out.println("example 20");
+        cities=a.getTop_N_Capital_Cities_World(n);
+        printCities(cities);
+
+        System.out.println("example 21");
+        cities=a.getTop_N_Capital_Cities_Continent("Europe", n);
+        printCities(cities);
+
+        System.out.println("example 22");
+        cities=a.getTop_N_Capital_Cities_Region("Western Europe", n);
+        printCities(cities);
+
+        Population population= new Population();
+        ArrayList<Population> populations = new ArrayList<Population>();
+        System.out.println("example 23");
+        population=a.get_Urban_Rural_Percentage_Continent("Europe");
+        populations.add(population);
+        printPopulations(populations);
+        populations.clear();
+
+        System.out.println("example 24");
+        population=a.get_Urban_Rural_Percentage_Region("Western Europe");
+        populations.add(population);
+        printPopulations(populations);
+        populations.clear();
+
+        System.out.println("example 25");
+        population=a.get_Urban_Rural_Percentage_Continent("France");
+        populations.add(population);
+        printPopulations(populations);
+        populations.clear();
+
+        System.out.println("example 26");
+        System.out.println(a.getPopulation_World());
+
+        System.out.println("example 27");
+        System.out.println(a.getPopulation_Continent("Europe"));
+
+        System.out.println("example 28");
+        System.out.println(a.getPopulation_Region("Western Europe"));
+
+        System.out.println("example 29");
+        System.out.println(a.getPopulation_Country("France"));
+
+        System.out.println("example 30");
+        System.out.println(a.getPopulation_District("Île-de-France"));
+
+        System.out.println("example 31");
+        System.out.println(a.getPopulation_City("Paris"));
 
         a.disconnect();
     }
@@ -115,6 +241,7 @@ public class App {
 
     /**
      * Gets the cities of the world sorted by larges pop to smallest
+     *
      * @return cities
      */
     public ArrayList<City> getCities_World_By_LS() {
@@ -148,6 +275,7 @@ public class App {
 
     /**
      * Gets population in and out of cities + percentages and total
+     *
      * @param cont
      * @return population
      */
@@ -156,21 +284,19 @@ public class App {
         try {
             Statement stmt = con.createStatement();
 
-            String select = "SELECT country.continent, SUM(country.population), "+
-                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")"+
-                    " FROM country WHERE country.continent="+cont
-
-                    ;
+            String select = "SELECT country.continent, SUM(country.population), " +
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent=" + cont + ")" +
+                    " FROM country WHERE country.continent=" + cont;
             ResultSet rset = stmt.executeQuery(select);
             ArrayList<Population> populations = new ArrayList<Population>();
             Population population = new Population();
             while (rset.next()) {
                 population.place = rset.getString("country.continent");
                 population.total = rset.getInt("SUM(country.population)");
-                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")");
-                population.rural=population.total-population.urban;
-                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
-                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                population.urban = rset.getInt("(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent=" + cont + ")");
+                population.rural = population.total - population.urban;
+                population.pUrban = (Double.valueOf(population.urban) / Double.valueOf(population.total)) * 100;
+                population.pRural = (Double.valueOf(population.rural) / Double.valueOf(population.total)) * 100;
                 populations.add(population);
             }
             return population;
@@ -183,6 +309,7 @@ public class App {
 
     /**
      * Gets population in and out of cities + percentages and total
+     *
      * @param region
      * @return population
      */
@@ -191,21 +318,19 @@ public class App {
         try {
             Statement stmt = con.createStatement();
 
-            String select = "SELECT country.region, SUM(country.population), "+
-                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")"+
-                    " FROM country WHERE country.region="+region
-
-                    ;
+            String select = "SELECT country.region, SUM(country.population), " +
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region=" + region + ")" +
+                    " FROM country WHERE country.region=" + region;
             ResultSet rset = stmt.executeQuery(select);
             ArrayList<Population> populations = new ArrayList<Population>();
             Population population = new Population();
             while (rset.next()) {
                 population.place = rset.getString("country.region");
                 population.total = rset.getInt("SUM(country.population)");
-                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")");
-                population.rural=population.total-population.urban;
-                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
-                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                population.urban = rset.getInt("(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region=" + region + ")");
+                population.rural = population.total - population.urban;
+                population.pUrban = (Double.valueOf(population.urban) / Double.valueOf(population.total)) * 100;
+                population.pRural = (Double.valueOf(population.rural) / Double.valueOf(population.total)) * 100;
                 populations.add(population);
             }
             return population;
@@ -218,6 +343,7 @@ public class App {
 
     /**
      * Gets population in and out of cities + percentages and total
+     *
      * @param country
      * @return population
      */
@@ -226,21 +352,19 @@ public class App {
         try {
             Statement stmt = con.createStatement();
 
-            String select = "SELECT country.name, SUM(country.population), "+
-                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")"+
-                    " FROM country WHERE country.name="+country
-
-                    ;
+            String select = "SELECT country.name, SUM(country.population), " +
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name=" + country + ")" +
+                    " FROM country WHERE country.name=" + country;
             ResultSet rset = stmt.executeQuery(select);
             ArrayList<Population> populations = new ArrayList<Population>();
             Population population = new Population();
             while (rset.next()) {
                 population.place = rset.getString("country.name");
                 population.total = rset.getInt("SUM(country.population)");
-                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")");
-                population.rural=population.total-population.urban;
-                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
-                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                population.urban = rset.getInt("(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name=" + country + ")");
+                population.rural = population.total - population.urban;
+                population.pUrban = (Double.valueOf(population.urban) / Double.valueOf(population.total)) * 100;
+                population.pRural = (Double.valueOf(population.rural) / Double.valueOf(population.total)) * 100;
                 populations.add(population);
             }
             return population;
@@ -254,6 +378,7 @@ public class App {
 
     /**
      * Get the country that a city is in
+     *
      * @param city
      * @return country
      */
@@ -294,6 +419,7 @@ public class App {
 
     /**
      * get the cities in a continent by large pop to small
+     *
      * @param cont
      * @return cities
      */
@@ -370,6 +496,7 @@ public class App {
 
     /**
      * Get Countries by Region, ordered by Population
+     *
      * @param region
      * @return
      */
@@ -450,6 +577,7 @@ public class App {
 
     /**
      * Get top N populated Countries in a Continent
+     *
      * @param continent
      * @param n
      * @return
@@ -491,6 +619,7 @@ public class App {
 
     /**
      * Get top N populated Countries in a Region
+     *
      * @param region
      * @param n
      * @return
@@ -693,6 +822,7 @@ public class App {
 
     /**
      * Get top N Cities in a Continent
+     *
      * @param continent
      * @param n
      * @return
@@ -731,6 +861,7 @@ public class App {
 
     /**
      * Get top N Cities in the World
+     *
      * @param n
      * @return
      */
@@ -765,6 +896,7 @@ public class App {
 
     /**
      * Get top N Cities in a Country
+     *
      * @param country
      * @param n
      * @return
@@ -800,7 +932,6 @@ public class App {
             return null;
         }
     }
-
 
 
     /**
@@ -927,6 +1058,7 @@ public class App {
 
     /**
      * Get all Capital Cities in the World, large to small
+     *
      * @return
      */
     public ArrayList<City> getCapital_Cities_World_By_LS() {
@@ -1000,6 +1132,7 @@ public class App {
 
     /**
      * Get all Capital Cities in a Continent, large to small
+     *
      * @param continent
      * @return
      */
@@ -1077,6 +1210,7 @@ public class App {
 
     /**
      * Gets top N populated capital Cities in a Region, large to small
+     *
      * @param region
      * @param n
      * @return
@@ -1117,6 +1251,7 @@ public class App {
 
     /**
      * Get all Capital Cities in a Region, large to small
+     *
      * @param region
      * @return
      */
@@ -1156,6 +1291,7 @@ public class App {
 
     /**
      * Get top N Cities in a Region
+     *
      * @param region
      * @param n
      * @return
@@ -1233,16 +1369,17 @@ public class App {
 
     /**
      * prints population report
+     *
      * @param populations
      */
-    public static void printPopulations(ArrayList<Population> populations){
-        if(populations==null){
+    public static void printPopulations(ArrayList<Population> populations) {
+        if (populations == null) {
             System.out.println("No Populations");
             return;
         }
         System.out.println(String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", "Place", "Total Pop", "% Urban", "Total Urban", "% Rural", "Total Rural"));
-        for(Population population: populations){
-            if(population==null) continue;
+        for (Population population : populations) {
+            if (population == null) continue;
             String pop_string = String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", population.place, population.total, population.pUrban, population.urban, population.pRural, population.rural);
             System.out.println(pop_string);
         }
@@ -1347,35 +1484,43 @@ public class App {
         }
     }
 
-    public int howManyPeopleSpeak(String lang){
-        lang="'"+lang+"'";
-        int speakers=0;
-        int totalpop=0;
-        double percentage;
-        try{
-            Statement stmt= con.createStatement();
 
-            String select=
+    public void languageReport(String[] langs) {
+            for (int i = 0; i < langs.length; i++) {
+            Language language = new Language();
+            language.totalpop = howManyPeopleSpeak(langs[i]);
+            language.language = langs[i];
+            System.out.println(language.language + " " + language.totalpop + " " + language.totalpop / getPopulation_World() * 100 + "%");
+        }
+    }
+
+    public int howManyPeopleSpeak(String lang) {
+        lang = "'" + lang + "'";
+        int speakers = 0;
+        int totalpop = 0;
+        double percentage;
+        try {
+            Statement stmt = con.createStatement();
+
+            String select =
                     "SELECT percentage, country.population, countrylanguage.countrycode " +
                             " FROM countrylanguage" +
                             " JOIN country ON (countrylanguage.countrycode=country.code)" +
-                            " WHERE language="+lang
-                    ;
-            ResultSet rset= stmt.executeQuery(select);
+                            " WHERE language=" + lang;
+            ResultSet rset = stmt.executeQuery(select);
 
 
-
-            while(rset.next()){
+            while (rset.next()) {
                 Language language = new Language();
 
-                language.pop=rset.getInt("country.population");
-                language.percentage=rset.getInt("percentage");
-                speakers+=Double.valueOf(language.pop)*Double.valueOf(language.percentage)/100;
+                language.pop = rset.getInt("country.population");
+                language.percentage = rset.getInt("percentage");
+                speakers += Double.valueOf(language.pop) * Double.valueOf(language.percentage) / 100;
 
             }
 
             return speakers;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get language details");
             return 0;
