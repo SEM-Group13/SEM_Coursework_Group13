@@ -1155,6 +1155,44 @@ public class App {
     }
 
     /**
+     * Get top N Cities in a Region
+     * @param region
+     * @param n
+     * @return
+     */
+    public ArrayList<City> getTop_N_Cities_Region(String region, int n) {
+        region = "'" + region + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, city.countrycode, country.region, city.population "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE country.region= " + region
+                            + " ORDER BY population DESC "
+                            + "LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.name");
+                city.country = rset.getString("CountryCode");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
      * Outputs report of countries table
      *
      * @param countries
