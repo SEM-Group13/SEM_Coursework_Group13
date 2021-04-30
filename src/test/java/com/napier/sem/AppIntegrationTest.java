@@ -170,6 +170,30 @@ assert(pop>=0);
         assertEquals(countries.get(0).population, country.population);
     }
 
+    @Test
+    void get_Urban_Rural_Percentage_Continent(){
+        Population population=app.get_Urban_Rural_Percentage_Continent("Europe");
+        ArrayList<Population> populations= new ArrayList<Population>();
+        populations.add(population);
+        app.printPopulations(populations);
+    }
+
+    @Test
+    void get_Urban_Rural_Percentage_Region(){
+        Population population=app.get_Urban_Rural_Percentage_Region("Western Europe");
+        ArrayList<Population> populations= new ArrayList<Population>();
+        populations.add(population);
+        app.printPopulations(populations);
+    }
+
+    @Test
+    void get_Urban_Rural_Percentage_Country(){
+        Population population=app.get_Urban_Rural_Percentage_Country("China");
+        ArrayList<Population> populations= new ArrayList<Population>();
+        populations.add(population);
+        app.printPopulations(populations);
+    }
+
     /*
     @Test
     void get_Top_N_Countries_Continent(){

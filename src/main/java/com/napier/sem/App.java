@@ -113,6 +113,221 @@ public class App {
         }
     }
 
+    /**
+     * Gets the cities of the world sorted by larges pop to smallest
+     * @return cities
+     */
+    public ArrayList<City> getCities_World_By_LS() {
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT name, countrycode, district, population "
+                            + "FROM city "
+                            + "ORDER BY population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param cont
+     * @return population
+     */
+    public Population get_Urban_Rural_Percentage_Continent(String cont) {
+        cont = "'" + cont + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+            String select = "SELECT country.continent, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")"+
+                    " FROM country WHERE country.continent="+cont
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.continent");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.continent="+cont+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param region
+     * @return population
+     */
+    public Population get_Urban_Rural_Percentage_Region(String region) {
+        region = "'" + region + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+            String select = "SELECT country.region, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")"+
+                    " FROM country WHERE country.region="+region
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.region");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.region="+region+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param country
+     * @return population
+     */
+    public Population get_Urban_Rural_Percentage_Country(String country) {
+        country = "'" + country + "'";
+        try {
+            Statement stmt = con.createStatement();
+
+            String select = "SELECT country.name, SUM(country.population), "+
+                    " (SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")"+
+                    " FROM country WHERE country.name="+country
+
+                    ;
+            ResultSet rset = stmt.executeQuery(select);
+            ArrayList<Population> populations = new ArrayList<Population>();
+            Population population = new Population();
+            while (rset.next()) {
+                population.place = rset.getString("country.name");
+                population.total = rset.getInt("SUM(country.population)");
+                population.urban= rset.getInt( "(SELECT SUM(city.population) FROM city JOIN country ON (city.countrycode=country.code) WHERE country.name="+country+")");
+                population.rural=population.total-population.urban;
+                population.pUrban=(Double.valueOf(population.urban)/Double.valueOf(population.total))*100;
+                population.pRural=(Double.valueOf(population.rural)/Double.valueOf(population.total))*100;
+                populations.add(population);
+            }
+            return population;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+
+    /**
+     * Get the country that a city is in
+     * @param city
+     * @return country
+     */
+    public Country getCountry_From_City(City city) {
+        String countryid = "'" + city.country + "'";
+        try {
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE code=" + countryid;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            Country country = new Country();
+            while (rset.next()) {
+
+
+                country.code = rset.getString("code");
+                country.name = rset.getString("name");
+                country.continent = rset.getString("continent");
+                country.region = rset.getString("region");
+                country.population = rset.getInt("population");
+                country.capital = rset.getInt("capital");
+                countries.add(country);
+            }
+            return country;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+
+    /**
+     * get the cities in a continent by large pop to small
+     * @param cont
+     * @return cities
+     */
+    public ArrayList<City> getCities_Continent_By_LS(String cont) {
+        cont = "'" + cont + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE continent=" + cont
+                            + " ORDER BY city.population ASC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
 
     /**
      * get Countries of a continent sorted by large to small
@@ -193,14 +408,15 @@ public class App {
     }
 
     /**
-     * Get the top n population countries in the world
+     * Gets details for one country based on their code
+     * Not sure if this is required by specification but is useful for testing
      *
-     * @param n
-     * @return countries
+     * @param countryid
+     * @return
      */
-    public ArrayList<Country> getTop_N_Countries_World(int n) {
+    public Country getCountry_World_By_Id(String countryid) {
+        countryid = "'" + countryid + "'";
         try {
-
             //Create SQL statment
             Statement stmt = con.createStatement();
 
@@ -208,14 +424,14 @@ public class App {
             String select =
                     "SELECT code, name, continent, region, population, capital "
                             + "FROM country "
-                            + "ORDER BY population DESC "
-                            + "LIMIT " + n;
+                            + "WHERE code=" + countryid;
             ResultSet rset = stmt.executeQuery(select);
 
-
             ArrayList<Country> countries = new ArrayList<Country>();
+            Country country = new Country();
             while (rset.next()) {
-                Country country = new Country();
+
+
                 country.code = rset.getString("code");
                 country.name = rset.getString("name");
                 country.continent = rset.getString("continent");
@@ -224,10 +440,10 @@ public class App {
                 country.capital = rset.getInt("capital");
                 countries.add(country);
             }
-            return countries;
+            return country;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get Country details");
+            System.out.println("Failed to get country details");
             return null;
         }
     }
@@ -315,212 +531,155 @@ public class App {
     }
 
     /**
-     * Get all cities in the world large to small
-     * @return
-     */
-    public ArrayList<City> getCities_World_By_LS() {
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT name, countrycode, district, population "
-                            + "FROM city "
-                            + "ORDER BY population ASC";
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-    /**
-     * Get cities of a region large to small
-     * @param cont
-     * @return
-     */
-    public ArrayList<City> getCities_Continent_By_LS(String cont) {
-        cont = "'" + cont + "'";
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, continent "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code) "
-                            + "WHERE continent=" + cont
-                            + " ORDER BY city.population ASC";
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-    /**
-     * Gets cities of a region large to small
+     * Get the top n population countries in the world
      *
-     * @param reg
-     * @return cities
-     */
-    public ArrayList<City> getCities_Region_By_LS(String reg) {
-        reg = "'" + reg + "'";
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, continent, region "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code) "
-                            + "WHERE region=" + reg
-                            + " ORDER BY city.population DESC";
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-    /**
-     * Gets cities of a country large to small
-     *
-     * @param cont
-     * @return cities
-     */
-    public ArrayList<City> getCities_Country_By_LS(String cont) {
-        cont = "'" + cont + "'";
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code) "
-                            + "WHERE country.name=" + cont
-                            + " ORDER BY city.population DESC";
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-    /**
-     * Gets cities of a district large to small
-     *
-     * @param dist
-     * @return cities
-     */
-    public ArrayList<City> getCities_District_By_LS(String dist) {
-        dist = "'" + dist + "'";
-        try {
-            //Create SQL statement
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string itself
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code) "
-                            + "WHERE district=" + dist
-                            + " ORDER BY city.population DESC";
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-    /**
-     * Get top N Cities in the World
      * @param n
-     * @return
+     * @return countries
      */
-    public ArrayList<City> getTop_N_Cities_World(int n) {
+    public ArrayList<Country> getTop_N_Countries_World(int n) {
         try {
-            //Create SQL statement
+
+            //Create SQL statment
             Statement stmt = con.createStatement();
 
-            //Make the SQL string itself
+            //Make the SQL string iteslf
             String select =
-                    "SELECT name, countrycode, population "
-                            + "FROM city "
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
                             + "ORDER BY population DESC "
                             + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country country = new Country();
+                country.code = rset.getString("code");
+                country.name = rset.getString("name");
+                country.continent = rset.getString("continent");
+                country.region = rset.getString("region");
+                country.population = rset.getInt("population");
+                country.capital = rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get Country details");
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets top N Cities in a district
+     *
+     * @param dist
+     * @param n
+     * @return cities
+     */
+    public ArrayList<City> getTop_N_Cities_District(String dist, int n) {
+        try {
+            dist = "'" + dist + "'";
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT name, countrycode, district, population "
+                            + "FROM city "
+                            + "WHERE district = " + dist
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
             ArrayList<City> cities = new ArrayList<City>();
             while (rset.next()) {
                 City city = new City();
                 city.name = rset.getString("Name");
                 city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets the top N most populated capital cities of a continent
+     *
+     * @param cont
+     * @param n
+     * @return cities
+     */
+    public ArrayList<City> getTop_N_Capital_Cities_Continent(String cont, int n) {
+        try {
+            cont = "'" + cont + "'";
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code)"
+                            + "WHERE continent = " + cont
+                            + " AND capital=ID"
+                            + " ORDER BY city.population DESC"
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+            //System.out.println("IGNORE ME");
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets the top N most populated capital cities of the world
+     *
+     * @param n
+     * @return cities
+     */
+    public ArrayList<City> getTop_N_Capital_Cities_World(int n) {
+        try {
+
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code)"
+
+                            + " AND capital=ID"
+                            + " ORDER BY city.population DESC"
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+            //System.out.println("IGNORE ME");
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
                 city.population = rset.getInt("Population");
                 cities.add(city);
             }
@@ -571,31 +730,27 @@ public class App {
     }
 
     /**
-     * Get top N Cities in a Region
-     * @param region
+     * Get top N Cities in the World
      * @param n
      * @return
      */
-    public ArrayList<City> getTop_N_Cities_Region(String region, int n) {
-        region = "'" + region + "'";
+    public ArrayList<City> getTop_N_Cities_World(int n) {
         try {
             //Create SQL statement
             Statement stmt = con.createStatement();
 
             //Make the SQL string itself
             String select =
-                    "SELECT city.name, city.countrycode, country.region, city.population "
+                    "SELECT name, countrycode, population "
                             + "FROM city "
-                            + "JOIN country ON (countrycode=code) "
-                            + "WHERE country.region= " + region
-                            + " ORDER BY population DESC "
+                            + "ORDER BY population DESC "
                             + "LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
             while (rset.next()) {
                 City city = new City();
-                city.name = rset.getString("city.name");
+                city.name = rset.getString("Name");
                 city.country = rset.getString("CountryCode");
                 city.population = rset.getInt("Population");
                 cities.add(city);
@@ -603,7 +758,7 @@ public class App {
             return cities;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
+            System.out.println("Failed to get City details");
             return null;
         }
     }
@@ -646,26 +801,111 @@ public class App {
         }
     }
 
+
+
     /**
-     * Gets top N Cities in a district
+     * Gets the top N countries in a continent
      *
-     * @param dist
+     * @param cont
      * @param n
-     * @return cities
+     * @return countries
      */
-    public ArrayList<City> getTop_N_Cities_District(String dist, int n) {
+    public ArrayList<Country> get_Top_N_Countries_Continent(String cont, int n) {
+        cont = "'" + cont + "'";
         try {
-            dist = "'" + dist + "'";
             //Create SQL statement
             Statement stmt = con.createStatement();
 
             //Make the SQL string itself
             String select =
-                    "SELECT name, countrycode, district, population "
-                            + "FROM city "
-                            + "WHERE district = " + dist
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE continent=" + cont
                             + " ORDER BY population DESC "
-                            + "LIMIT " + n;
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country country = new Country();
+
+                country.code = rset.getString("code");
+                country.name = rset.getString("name");
+                country.continent = rset.getString("continent");
+                country.region = rset.getString("region");
+                country.population = rset.getInt("population");
+                country.capital = rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets top N countries in a region
+     *
+     * @param reg
+     * @param n
+     * @return countries
+     */
+    public ArrayList<Country> get_Top_N_Countries_Region(String reg, int n) {
+        reg = "'" + reg + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT code, name, continent, region, population, capital "
+                            + "FROM country "
+                            + "WHERE region=" + reg
+                            + " ORDER BY population DESC "
+                            + " LIMIT " + n;
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country country = new Country();
+
+                country.code = rset.getString("code");
+                country.name = rset.getString("name");
+                country.continent = rset.getString("continent");
+                country.region = rset.getString("region");
+                country.population = rset.getInt("population");
+                country.capital = rset.getInt("capital");
+                countries.add(country);
+            }
+            return countries;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets cities of a region large to small
+     *
+     * @param reg
+     * @return cities
+     */
+    public ArrayList<City> getCities_Region_By_LS(String reg) {
+        reg = "'" + reg + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, region "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE region=" + reg
+                            + " ORDER BY city.population DESC";
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -678,82 +918,6 @@ public class App {
                 cities.add(city);
             }
             return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get City details");
-            return null;
-        }
-    }
-
-    public Country getCountry_From_City(City city) {
-        String countryid = "'" + city.country + "'";
-        try {
-            //Create SQL statment
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string iteslf
-            String select =
-                    "SELECT code, name, continent, region, population, capital "
-                            + "FROM country "
-                            + "WHERE code=" + countryid;
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<Country> countries = new ArrayList<Country>();
-            Country country = new Country();
-            while (rset.next()) {
-
-
-                country.code = rset.getString("code");
-                country.name = rset.getString("name");
-                country.continent = rset.getString("continent");
-                country.region = rset.getString("region");
-                country.population = rset.getInt("population");
-                country.capital = rset.getInt("capital");
-                countries.add(country);
-            }
-            return country;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
-            return null;
-        }
-    }
-
-
-    /**
-     * Gets details for one country based on their code
-     * Not sure if this is required by specification but is useful for testing
-     *
-     * @param countryid
-     * @return
-     */
-    public Country getCountry_World_By_Id(String countryid) {
-        countryid = "'" + countryid + "'";
-        try {
-            //Create SQL statment
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string iteslf
-            String select =
-                    "SELECT code, name, continent, region, population, capital "
-                            + "FROM country "
-                            + "WHERE code=" + countryid;
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<Country> countries = new ArrayList<Country>();
-            Country country = new Country();
-            while (rset.next()) {
-
-
-                country.code = rset.getString("code");
-                country.name = rset.getString("name");
-                country.continent = rset.getString("continent");
-                country.region = rset.getString("region");
-                country.population = rset.getInt("population");
-                country.capital = rset.getInt("capital");
-                countries.add(country);
-            }
-            return country;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get country details");
@@ -797,6 +961,44 @@ public class App {
     }
 
     /**
+     * Gets cities of a country large to small
+     *
+     * @param cont
+     * @return cities
+     */
+    public ArrayList<City> getCities_Country_By_LS(String cont) {
+        cont = "'" + cont + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE country.name=" + cont
+                            + " ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
      * Get all Capital Cities in a Continent, large to small
      * @param continent
      * @return
@@ -816,6 +1018,84 @@ public class App {
                             + "WHERE continent = " + continent
                             + " AND capital=ID "
                             + "ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("city.Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get City details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets cities of a district large to small
+     *
+     * @param dist
+     * @return cities
+     */
+    public ArrayList<City> getCities_District_By_LS(String dist) {
+        dist = "'" + dist + "'";
+        try {
+            //Create SQL statement
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string itself
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, continent, country.name "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code) "
+                            + "WHERE district=" + dist
+                            + " ORDER BY city.population DESC";
+            ResultSet rset = stmt.executeQuery(select);
+
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryCode");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+            return cities;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
+    /**
+     * Gets top N populated capital Cities in a Region, large to small
+     * @param region
+     * @param n
+     * @return
+     */
+    public ArrayList<City> getTop_N_Capital_Cities_Region(String region, int n) {
+        try {
+            region = "'" + region + "'";
+            //Create SQL statment
+            Statement stmt = con.createStatement();
+
+            //Make the SQL string iteslf
+            String select =
+                    "SELECT city.name, countrycode, district, city.population, code "
+                            + "FROM city "
+                            + "JOIN country ON (countrycode=code)"
+                            + "WHERE region= " + region
+                            + " AND capital=ID"
+                            + " ORDER BY city.population DESC"
+                            + " LIMIT " + n;
             ResultSet rset = stmt.executeQuery(select);
 
             ArrayList<City> cities = new ArrayList<City>();
@@ -875,127 +1155,6 @@ public class App {
     }
 
     /**
-     * Gets the top N most populated capital cities of the world, large to small
-     * @param n
-     * @return cities
-     */
-    public ArrayList<City> getTop_N_Capital_Cities_World(int n) {
-        try {
-
-            //Create SQL statment
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string iteslf
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, code "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code)"
-
-                            + " AND capital=ID"
-                            + " ORDER BY city.population DESC"
-                            + " LIMIT " + n;
-            ResultSet rset = stmt.executeQuery(select);
-            //System.out.println("IGNORE ME");
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("city.Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get City details");
-            return null;
-        }
-    }
-
-    /**
-     * Gets the top N most populated capital cities of a continent, large to small
-     *
-     * @param cont
-     * @param n
-     * @return cities
-     */
-    public ArrayList<City> getTop_N_Capital_Cities_Continent(String cont, int n) {
-        try {
-            cont = "'" + cont + "'";
-            //Create SQL statment
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string iteslf
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, code "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code)"
-                            + "WHERE continent = " + cont
-                            + " AND capital=ID"
-                            + " ORDER BY city.population DESC"
-                            + " LIMIT " + n;
-            ResultSet rset = stmt.executeQuery(select);
-            //System.out.println("IGNORE ME");
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("city.Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get City details");
-            return null;
-        }
-    }
-
-    /**
-     * Gets top N populated capital Cities in a Region, large to small
-     * @param region
-     * @param n
-     * @return
-     */
-    public ArrayList<City> getTop_N_Capital_Cities_Region(String region, int n) {
-        try {
-            region = "'" + region + "'";
-            //Create SQL statment
-            Statement stmt = con.createStatement();
-
-            //Make the SQL string iteslf
-            String select =
-                    "SELECT city.name, countrycode, district, city.population, code "
-                            + "FROM city "
-                            + "JOIN country ON (countrycode=code)"
-                            + "WHERE region= " + region
-                            + " AND capital=ID"
-                            + " ORDER BY city.population DESC"
-                            + " LIMIT " + n;
-            ResultSet rset = stmt.executeQuery(select);
-
-            ArrayList<City> cities = new ArrayList<City>();
-            while (rset.next()) {
-                City city = new City();
-                city.name = rset.getString("city.Name");
-                city.country = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("Population");
-                cities.add(city);
-            }
-            return cities;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to get City details");
-            return null;
-        }
-    }
-
-
-    /**
      * Outputs report of countries table
      *
      * @param countries
@@ -1031,6 +1190,23 @@ public class App {
 
             String city_string = String.format("|%-20s | %-15s | %-20s | %-30d|", city.name, city.country, city.district, city.population);
             System.out.println(city_string);
+        }
+    }
+
+    /**
+     * prints population report
+     * @param populations
+     */
+    public static void printPopulations(ArrayList<Population> populations){
+        if(populations==null){
+            System.out.println("No Populations");
+            return;
+        }
+        System.out.println(String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", "Place", "Total Pop", "% Urban", "Total Urban", "% Rural", "Total Rural"));
+        for(Population population: populations){
+            if(population==null) continue;
+            String pop_string = String.format("|%-20s | %-10s | %-25s | %-10s | %-25s | %-10s |", population.place, population.total, population.pUrban, population.urban, population.pRural, population.rural);
+            System.out.println(pop_string);
         }
     }
 
