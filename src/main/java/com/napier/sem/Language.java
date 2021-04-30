@@ -1,6 +1,6 @@
 package com.napier.sem;
 
-public class CountryLanguage {
+public class Language {
     /**
      * 3 digit ID code for country
      */
@@ -22,4 +22,9 @@ public class CountryLanguage {
      * Percentage of speakers in country
      */
     public double percentage;
+
+    /**
+     * Number of people in country who speak
+     */
+    public int pop;
 }

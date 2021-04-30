@@ -1347,6 +1347,40 @@ public class App {
         }
     }
 
+    public int howManyPeopleSpeak(String lang){
+        lang="'"+lang+"'";
+        int speakers=0;
+        int totalpop=0;
+        double percentage;
+        try{
+            Statement stmt= con.createStatement();
+
+            String select=
+                    "SELECT percentage, country.population, countrylanguage.countrycode " +
+                            " FROM countrylanguage" +
+                            " JOIN country ON (countrylanguage.countrycode=country.code)" +
+                            " WHERE language="+lang
+                    ;
+            ResultSet rset= stmt.executeQuery(select);
+
+
+
+            while(rset.next()){
+                Language language = new Language();
+
+                language.pop=rset.getInt("country.population");
+                language.percentage=rset.getInt("percentage");
+                speakers+=Double.valueOf(language.pop)*Double.valueOf(language.percentage)/100;
+
+            }
+
+            return speakers;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get language details");
+            return 0;
+        }
+    }
 
     /**
      * Get the population of a continent

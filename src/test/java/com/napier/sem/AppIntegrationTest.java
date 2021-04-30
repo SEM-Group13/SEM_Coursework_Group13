@@ -38,7 +38,10 @@ public class AppIntegrationTest {
 //        assertEquals(country.population, 7160400);
 //        assertEquals(country.capital, 3248);
 //    }
-
+@Test
+void howManyPeopleSpeak(){
+        System.out.println(app.howManyPeopleSpeak("English"));
+}
     /**
      * Test that app.getTop_N_Cities_District() can be printed with app.printCities
      * Check that cities are in the correct order
