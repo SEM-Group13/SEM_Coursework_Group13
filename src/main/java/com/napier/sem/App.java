@@ -113,6 +113,10 @@ public class App {
         }
     }
 
+    /**
+     * Gets the cities of the world sorted by larges pop to smallest
+     * @return cities
+     */
     public ArrayList<City> getCities_World_By_LS() {
         try {
             //Create SQL statement
@@ -142,6 +146,11 @@ public class App {
         }
     }
 
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param cont
+     * @return population
+     */
     public Population get_Urban_Rural_Percentage_Continent(String cont) {
         cont = "'" + cont + "'";
         try {
@@ -172,6 +181,11 @@ public class App {
         }
     }
 
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param region
+     * @return population
+     */
     public Population get_Urban_Rural_Percentage_Region(String region) {
         region = "'" + region + "'";
         try {
@@ -202,6 +216,11 @@ public class App {
         }
     }
 
+    /**
+     * Gets population in and out of cities + percentages and total
+     * @param country
+     * @return population
+     */
     public Population get_Urban_Rural_Percentage_Country(String country) {
         country = "'" + country + "'";
         try {
@@ -232,6 +251,12 @@ public class App {
         }
     }
 
+
+    /**
+     * Get the country that a city is in
+     * @param city
+     * @return country
+     */
     public Country getCountry_From_City(City city) {
         String countryid = "'" + city.country + "'";
         try {
@@ -267,6 +292,11 @@ public class App {
     }
 
 
+    /**
+     * get the cities in a continent by large pop to small
+     * @param cont
+     * @return cities
+     */
     public ArrayList<City> getCities_Continent_By_LS(String cont) {
         cont = "'" + cont + "'";
         try {
@@ -338,6 +368,11 @@ public class App {
         }
     }
 
+    /**
+     * get countrries of a region by large pop to small
+     * @param region
+     * @return countries
+     */
     public ArrayList<Country> getCountries_Region_By_LS(String region) {
         region = "'" + region + "'";
         try {
@@ -812,6 +847,10 @@ public class App {
         }
     }
 
+    /**
+     * prints population report
+     * @param populations
+     */
     public static void printPopulations(ArrayList<Population> populations){
         if(populations==null){
             System.out.println("No Populations");
